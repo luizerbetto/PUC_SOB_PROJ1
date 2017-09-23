@@ -1,0 +1,16 @@
+/*
+*Para facilitar o nosso trabalho e evitar que tenhamos problemas de um acabar colocando no git sobre o outro segue umas pequenas regra:
+* 1-por favor cada um criar um repositorio com seu primeiro nome onde será feito cada uma das suas coisas, assim caso alguem mande algo
+*sem querer podemos evitar sobreescritos do codigo final;
+* 2-serão criados 3 repositoris extras, um contendo os exemplos dos links, outro contendo o projeto final da semana e outro servindo de backup
+*para o final ao inicio de cada nova semana;
+* 3-ao final de cada terça um codigo final será criado das partes de cada repositorio separado e colocado no repositorio final, antes disso
+*qualquer conteudo desse será passado ao backup;
+* 4-na criação de variaveis dos codigos para facilitar compreenção por parte dos outros membros, por favor seguir a seguinte nomemclatua 
+*se possivel:
+* variavies devem ser criadas contendo alguma coisa no nome relacionado ao seu uso
+* ao inicio de qualquer função, estrutura ou loop colocar um explicação acima da 1ª linha descrevendo seu proposito;
+*
+*obrigado pela compreenção, fiquem atentos pois novas regras podem vir a ser escritas a pedido de membros do grupo;
+*em breve resumos dos link serão adicionados e explicações dos mesmos link serão deixados em pastas espeficicas;
+*/
