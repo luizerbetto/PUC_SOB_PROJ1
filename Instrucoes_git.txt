@@ -9,6 +9,8 @@
 *	cd Documentos/
 *depois, dentro desse repositorio, baixe o projeto com o seguinte comando:
 *	git clone git@github.com:luizerbetto/PUC_SOB_PROJ1.git
+	ou
+	git clone https://www.github.com/luizerbetto/PUC_SOB_PROJ1.git
 *talvez precise mudar o luizerbetto pelo seu proprio nome de usuario.
 *com isso será criado um novo repositorio chamado PUC_SOB_PROJ1;
 *quando quiser adicionar um novo item ao projeto use os seguintes comandos:
