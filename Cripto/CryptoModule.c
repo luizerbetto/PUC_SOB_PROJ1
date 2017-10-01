@@ -5,13 +5,15 @@
 #include <linux/stat.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h> 
+#include <linux/device.h>
 
 #define DEVICE_NAME "CryptoModule"   /* Dev name as it appears in /proc/devices   */
+#define CLASS_NAME "crypto"
 #define BUF_LEN 80              /* Max length of the message from the device */
 
 // Prototypes - this would normally go in a .h file
-static int cryptomodule_init(void);
-static void cryptomodule_exit(void);
+//static int cryptomodule_init(void);
+//static void cryptomodule_exit(void);
 static int device_open(struct inode *, struct file *);
 static int device_release(struct inode *, struct file *);
 static ssize_t device_read(struct file *, char *, size_t, loff_t *);
@@ -65,7 +67,7 @@ static int __init cryptomodule_init(void)
    printk(KERN_INFO "Cripto: device class registered correctly\n");
  
    // Register the device driver
-   ebbcharDevice = device_create(criptoClass, NULL, MKDEV(Major, 0), NULL, DEVICE_NAME);
+   criptoDevice = device_create(criptoClass, NULL, MKDEV(Major, 0), NULL, DEVICE_NAME);
    if (IS_ERR(criptoDevice)){               // Clean up if there is an error
       class_destroy(criptoClass);           // Repeated code but the alternative is goto statements
       unregister_chrdev(Major, DEVICE_NAME);

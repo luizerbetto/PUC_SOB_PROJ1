@@ -1,0 +1,1 @@
+cmd_/home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.ko := ld -r -m elf_i386 -T /usr/src/linux-3.2.36/scripts/module-common.lds --build-id  -o /home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.ko /home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.o /home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.mod.o
