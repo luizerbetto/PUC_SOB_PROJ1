@@ -168,3 +168,5 @@ static int device_open(struct inode *inode, struct file *file)
 
 module_init(cryptomodule_init);
 module_exit(cryptomodule_exit);
+
+MODULE_LICENSE("GPL");
