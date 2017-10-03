@@ -17,24 +17,25 @@ void menu(){
 	fflush(stdin);
 }
 
-void dataToParam(char choice, char data[], char *param){
+/*void dataToParam(char choice, char data[], char *param){
 	/*
 	 * Converte os dados pegos para uma instrução
 	 * que o módulo consegue reconhecer.
 	 * Estrutura da instrução: comando dados
-	*/
+	*
 	
 	strcat(param, choice);
 	strcat(param, " ");
 	strcat(param, data);
 	
-}
+}*/
 
 int main(){
 	
 	int fp, wr, rd;
-	char data[TAM_BUFFER - 2], param[TAM_BUFFER];
-	char choice;
+	char data[TAM_BUFFER - 2], param[TAM_BUFFER+5];
+	char choice[3];
+	param[0] = '\0';
 	
 	// Abertura do device
 	fp = open("/dev/crypto", O_RDWR);
@@ -44,14 +45,17 @@ int main(){
 	}
 	
 	menu();
-	scanf("%c", &choice);
+	scanf("%c", choice);
 	
 	printf("Digite os dados que serão utilizados: ");
 	scanf("%s", data);
 	
-	printf("Escolha de função: %c\nDados recebidos: %s\n", choice, data);
+	printf("Escolha de função: %s\nDados recebidos: %s\n", choice, data);
 	
-	dataToParam(choice, &data, param);
+	//dataToParam(choice, &data, param);
+	strcat(param, choice);
+	strcat(param, " ");
+	strcat(param, data);
 	
 	// Escrita no device
 	wr = write(fp, param, strlen(param));
