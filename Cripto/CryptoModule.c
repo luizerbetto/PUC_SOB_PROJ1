@@ -1,3 +1,9 @@
+/*
+*comando para dar permissão ao user.c usar esse device
+*sudo chmod 666 /dev/crypto 
+*/
+
+
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/kernel.h>
@@ -31,6 +37,7 @@ static short  size_of_message;              ///< Used to remember the size of th
 
 static struct class*  criptoClass  = NULL; ///< The device-driver class struct pointer
 static struct device* criptoDevice = NULL; ///< The device-driver device struct pointer
+
 
 //respostas através do arquivo de dispositivo /dev/crypto
 //c-cifrar(write) d-decrifrar(read) h-resumo criptografico(?)
@@ -96,6 +103,27 @@ static ssize_t device_write(struct file *filp,const char *buff,size_t len,loff_t
 	sprintf(message, "%s(%zu letters)", buff, len);   // appending received string with its length
 	size_of_message = strlen(message);                 // store the length of the stored message
 	printk(KERN_INFO "EBBChar: Received %zu characters from the user\n", len);
+	
+	if(message[0] == 'c')
+	{ 
+		sprintf(message,"criptografia");
+	}else
+	{
+		if(message[0] == 'd')
+		{
+			sprintf(message,"descriptografia");
+		}else
+		{
+			if(message[0] == 'h')
+			{
+				sprintf(message,"hash");
+			}
+			else
+			{
+				sprintf(message,"invalido");
+			}
+		}
+	}
 	return len;
 }
 
