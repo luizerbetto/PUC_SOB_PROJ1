@@ -7,7 +7,7 @@
 #include <asm/uaccess.h> 
 #include <linux/device.h>
 
-#define DEVICE_NAME "CryptoModule"   /* Dev name as it appears in /proc/devices   */
+#define DEVICE_NAME "crypto"   /* Dev name as it appears in /proc/devices   */
 #define CLASS_NAME "crypto"
 #define BUF_LEN 80              /* Max length of the message from the device */
 
@@ -25,6 +25,9 @@ static int Device_Open = 0;	/* Is device open? Used to prevent multiple access t
 
 static char msg[BUF_LEN];       /* The msg the device will give when asked */
 static char *msg_Ptr;
+
+static char   message[256] = {0};           ///< Memory for the string that is passed from userspace
+static short  size_of_message;              ///< Used to remember the size of the string stored
 
 static struct class*  criptoClass  = NULL; ///< The device-driver class struct pointer
 static struct device* criptoDevice = NULL; ///< The device-driver device struct pointer
@@ -88,13 +91,12 @@ static void __exit cryptomodule_exit(void)
    	printk(KERN_INFO "Cripto: Goodbye from the LKM!\n");
 }
 
-static ssize_t device_write(struct file *filp,
-			    const char *buff,
-			    size_t len,
-			    loff_t * off)
+static ssize_t device_write(struct file *filp,const char *buff,size_t len,loff_t * off)
 {
-        printk(KERN_ALERT "Sorry, this operation isn't supported.\n");
-        return -EINVAL;
+	sprintf(message, "%s(%zu letters)", buff, len);   // appending received string with its length
+	size_of_message = strlen(message);                 // store the length of the stored message
+	printk(KERN_INFO "EBBChar: Received %zu characters from the user\n", len);
+	return len;
 }
 
 static ssize_t device_read(struct file *filp,   /* see include/linux/fs.h   */
@@ -102,39 +104,17 @@ static ssize_t device_read(struct file *filp,   /* see include/linux/fs.h   */
                            size_t length,       /* length of the buffer     */
                            loff_t * offset)
 {
-        /*
-         * Number of bytes actually written to the buffer
-         */
-        int bytes_read = 0;
-
-        /*
-         * If we're at the end of the message,
-         * return 0 signifying end of file
-         */
-        if (*msg_Ptr == 0)
-                return 0;
-
-        /*
-         * Actually put the data into the buffer
-         */
-        while (length && *msg_Ptr) {
-
-                /*
-                 * The buffer is in the user data segment, not the kernel
-                 * segment so "*" assignment won't work.  We have to use
-                 * put_user which copies data from the kernel data segment to
-                 * the user data segment.
-                 */
-                put_user(*(msg_Ptr++), buffer++);
-
-                length--;
-                bytes_read++;
-        }
-
-        /*
-         * Most read functions return the number of bytes put into the buffer
-         */
-        return bytes_read;
+	int error_count = 0;
+	// copy_to_user has the format ( * to, *from, size) and returns 0 on success
+	error_count = copy_to_user(buffer, message, size_of_message);
+	if (error_count==0){            // if true then have success
+		printk(KERN_INFO "EBBChar: Sent %d characters to the user\n", size_of_message);
+		return (size_of_message=0);  // clear the position to the start and return 0
+	}
+	else {
+		printk(KERN_INFO "EBBChar: Failed to send %d characters to the user\n", error_count);
+		return -EFAULT;              // Failed -- return a bad address message (i.e. -14)
+	}
 }
 
 static int device_release(struct inode *inode, struct file *file)

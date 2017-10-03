@@ -26,11 +26,11 @@ __attribute__((section("__versions"))) = {
 	{ 0x6bc3fbc0, "__unregister_chrdev" },
 	{ 0x6c0f51ce, "__class_create" },
 	{ 0x346bd748, "__register_chrdev" },
-	{ 0xc3aaf0a9, "__put_user_1" },
-	{ 0xa1c76e0a, "_cond_resched" },
+	{ 0x2f287f0d, "copy_to_user" },
+	{ 0x50eedeb8, "printk" },
+	{ 0xd0d8621b, "strlen" },
 	{ 0x91715312, "sprintf" },
 	{ 0x966e767a, "module_put" },
-	{ 0x50eedeb8, "printk" },
 };
 
 static const char __module_depends[]
@@ -39,4 +39,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "E7007D5134B0883A6CCA567");
+MODULE_INFO(srcversion, "8D0C10357B185419ADCD56B");
