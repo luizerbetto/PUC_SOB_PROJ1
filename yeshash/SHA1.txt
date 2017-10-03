@@ -7,6 +7,7 @@ O SHA1 implementa um algoritmo de hash sem chave, que pega uma mensagem de até 
 5) Saída: depois de processar todos os blocos de 512 bits, a saída da última iteração fornece o hash de 160 bits.
 
 
+
 https://rosettacode.org/wiki/SHA-1#C
 Library: OpenSSL
 #include <stdio.h>

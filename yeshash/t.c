@@ -4,6 +4,7 @@ Há a entrada de uma string (argv [1]) e gera um string hash através da funçã
 Esta função armazena o valor calculado na variável "calc".
 Então, no loop for, eu copio o valor de "calc" para "transf", de acordo com o formato padrão das cordas SHA1.
 */
+
 #include <stdio.h>
 #include <string.h>
 #include <openssl/crypto.h>
@@ -29,7 +30,7 @@ int main(int argn, char *argv[]) {
     SHA1((unsigned char *)argv[1], sizeof(argv[1]), calc);
  
     for (i=0; i < SHA_DIGEST_LENGTH; i++) {
-        sprintf((char*)&(transf[i])*2, "%02x", calc[i]);
+        sprintf((char*)&(transf[i]), "%02x", calc[i]);
     }
  
     printf("SHA1 of %s is %s\n", argv[1], transf);
