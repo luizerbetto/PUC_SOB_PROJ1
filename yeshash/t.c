@@ -6,7 +6,7 @@ Então, no loop for, eu copio o valor de "calc" para "transf", de acordo com o f
 */
 #include <stdio.h>
 #include <string.h>
-#include <openssl/sha.h>
+#include <openssl/crypto.h>
 #define SHA_DIGEST_LENGTH 20
  
 int main(int argn, char *argv[]) {
