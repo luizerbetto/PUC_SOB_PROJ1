@@ -1,0 +1,30 @@
+﻿link: http://johnnymarques.blogspot.com.br/2007/04/sha1-secure-hash-algoritm.html
+O SHA1 implementa um algoritmo de hash sem chave, que pega uma mensagem de até 264 bits e produz um resumo da mensagem de 160-bits e é utilizado para a verificação de integridade da mensagem. A sua lógica de funcionamento pode ser dividida em cinco passos:
+1) Acrescentar bits de enchimento: toda mensagem terá bits acrescentados, sendo o tamanho final modulo 512 congruente a 448. Assim, uma mensagem pode ter de 1 a 512 bits de enchimento, que consiste de um bit com valor 1 seguido de quantos bits 0 forem necessários.
+2) Acrescentar tamanho da mensagem: um bloco de 64 bits é acrescentado à mensagem, sendo tratado como um inteiro sem sinal de 64-bit. Este bloco contém o tamanho original da mensagem (antes do enchimento).
+3) Inicialização do buffer MD: um buffer de 160 bits é utilizado para manter os resultados intermediários e final da função de hash. Este buffer pode ser representado como cinco registradores de 32 bits, que são inicializados com o seguinte valor (em hexadecimal): A = 67 45 23 01 B = EF CD AB 89 C = 98 BA DC FE D = 10 32 54 76 E = C3 D2 E1 F0
+4) Processamento da mensagem em blocos de 512 bits: o centro do algoritmo é uma função de compressão que consiste de quatro iterações, que possuem 20 passos cada. Estas iterações são similares, mas utilizam uma estrutura lógica diferente.
+5) Saída: depois de processar todos os blocos de 512 bits, a saída da última iteração fornece o hash de 160 bits.
+
+
+
+https://rosettacode.org/wiki/SHA-1#C
+Library: OpenSSL
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/sha.h>
+ 
+int main()
+{
+ int i;
+ unsigned char result[SHA_DIGEST_LENGTH];
+ const char *string = "Rosetta Code";
+ 
+ SHA1(string, strlen(string), result);
+ 
+ for(i = 0; i < SHA_DIGEST_LENGTH; i++)
+   printf("%02x%c", result[i], i < (SHA_DIGEST_LENGTH-1) ? ' ' : '\n');
+ 
+ return EXIT_SUCCESS;
+}
