@@ -7,7 +7,7 @@ struct tcrypt_result {
 struct skcipher_def {
     struct scatterlist sg;
     struct crypto_skcipher *tfm; //controlador de cifra, nescessario para invocação API da chave simetrica
-    struct skcipher_request *req;
+    struct skcipher_request *req; // requisição de chave simetrica de cifra
     struct tcrypt_result result;
 };
 
@@ -30,16 +30,16 @@ static unsigned int test_skcipher_encdec(struct skcipher_def *sk,
     int rc = 0;
 
     if (enc)
-        rc = crypto_skcipher_encrypt(sk->req);
+        rc = crypto_skcipher_encrypt(sk->req); // criptografa plaintext
     else
-        rc = crypto_skcipher_decrypt(sk->req);
+        rc = crypto_skcipher_decrypt(sk->req); // descriptografa texto
 
     switch (rc) {
     case 0:
         break;
     case -EINPROGRESS:
     case -EBUSY:
-        rc = wait_for_completion_interruptible(
+        rc = wait_for_completion_interruptible( /*espera o final de uma tarefa assinalada*/
             &sk->result.completion);
         if (!rc && !sk->result.err) {
             reinit_completion(&sk->result.completion);
@@ -63,7 +63,7 @@ static int test_skcipher(void)
     struct skcipher_request *req = NULL; // requisição de chave simetrica de cifra
     char *scratchpad = NULL;
     char *ivdata = NULL; //vetor inicialização -- aleatoriza os caracteres de criptografia, manter aleatorio
-    unsigned char key[32];
+    unsigned char key[32]; // chave
     int ret = -EFAULT;
 
     skcipher = crypto_alloc_skcipher("cbc-aes-aesni", 0, 0);/* aloca o controlador da chave simetrica de sifra
@@ -127,11 +127,11 @@ static int test_skcipher(void)
     *inciando uma lista SG,
     *passamos a lista, endereço de entrada e saida, comprimento do endereço
     */
-    skcipher_request_set_crypt(req, &sk.sg, &sk.sg, 16, ivdata);
+    skcipher_request_set_crypt(req, &sk.sg, &sk.sg, 16, ivdata); // configurando o destino e a origem da lista SG
     init_completion(&sk.result.completion);
 
     /* encrypt data */
-    ret = test_skcipher_encdec(&sk, 1);
+    ret = test_skcipher_encdec(&sk, 1); //função propria do codigo
     if (ret)
         goto out;
 
@@ -139,12 +139,12 @@ static int test_skcipher(void)
 
 out:
     if (skcipher)
-        crypto_free_skcipher(skcipher);
+        crypto_free_skcipher(skcipher); //libera o controlador
     if (req)
-        skcipher_request_free(req);
+        skcipher_request_free(req); // libera a estrutura
     if (ivdata)
-        kfree(ivdata);
+        kfree(ivdata); // libera o iv
     if (scratchpad)
-        kfree(scratchpad);
+        kfree(scratchpad); // libera a data de entrada
     return ret;
 }
