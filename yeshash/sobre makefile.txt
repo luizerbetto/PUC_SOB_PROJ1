@@ -1,0 +1,25 @@
+fonte: http://www.uniriotec.br/~morganna/guia/make.html
+make
+
+    make [opções] alvo...
+
+    O argumento alvo é um parâmetro passado para o utilitário. 
+
+make
+
+   O comando make usa o conceito de alvo para definir os comandos a serem executados. Entenda por alvo um conjunto de instruções. Um alvo possui a seguinte estrutura dentro de um arquivo makefile
+onde temos a identificação do alvo, os pré-requisitos necessários para executar o alvo e os comandos associados ao alvo em questão. Um nome de alvo sempre inicia no começo da linha e é seguido por um sinal de dois-pontos (":"). Um alvo pode ter como dependência uma lista de outros alvos ou uma lista de arquivos. Quando a dependência é uma lista de alvos, então cada alvo da lista deve ser executado antes do alvo especificado. Quando a dependência é uma lista de arquivos, então cada um dos arquivos da lista deve existir para o alvo poder ser executado.
+Outra importante observação em relação a estrutura mostrada acima diz respeito a posição onde são escritas as linhas de ação (comandos). Em um arquivo make, os comandos devem iniciar com um caractere de tabulação. Portanto, deve-se pressionar a tecla Tab, antes de digitar os comandos do alvo. POr exemplo: 
+nome_alvo : [dependências]
+    	   comandos
+
+Na linha do comando make pode-se definir um ou mais alvos. Caso nenhum alvo seja definido, o utilitário executa o primeiro alvo especificado dentro do arquivo. 
+
+all : nome do primeiro alvo e portanto, o nome padrão.
+clean : usado para apagar arquivos-objeto (*.o) e outros arquivos temporários.
+
+
+O símbolo $ substituir o nome da macro pelo seu conteúdo
+
+
+
