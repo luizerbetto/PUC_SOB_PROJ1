@@ -1,5 +1,5 @@
 /*
- Para compilar deve incluir a flag “-lssl” .
+ Para compilar deve incluir a flag “-lcrypto” .
 Há a entrada de uma string (argv [1]) e gera um string hash através da função SHA1 (). O valor de "SHA_DIGEST_LENGTH" é de 20 bytes, essa é a dimensão da saída SHA1.
 Esta função armazena o valor calculado na variável "calc".
 Então, no loop for, eu copio o valor de "calc" para "transf", de acordo com o formato padrão das cordas SHA1.
