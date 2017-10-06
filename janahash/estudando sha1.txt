@@ -1,0 +1,7 @@
+O SHA1 implementa um algoritmo de hash sem chave, que pega uma mensagem de até 264 bits e produz um resumo da mensagem de 160-bits e é utilizado para a verificação de integridade da mensagem. Ele é baseado nos princípios de projeto dos algoritmos de hash MD4 e MD5 (Memory Digest 4 e 5). O SHA1 é considerado o sucessor do MD5, um dos primeiros e mais utilizado algoritmos de hash, processando sequencialmente blocos de 512 bits. Cada processamento é feito por bloco com cerca de 80 passos
+
+
+
+O SHA-1 foi publicado oficialmente como um padrão, e os hashes são utilizados para validar a integridade de um conteúdo digital, sendo eles parte de qualquer certificado digital.
+
+Hash converte um pedaço de dado (seja grande ou pequeno), em um pedaço relativamente pequeno de dados, como um sequência de caracteres (string) ou um inteiro.
