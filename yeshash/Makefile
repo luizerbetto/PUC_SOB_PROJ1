@@ -1,16 +1,18 @@
-
-# link de bibliotecas utilizadas
+	# link de bibliotecas utilizadas
 	TESTLINKER=-lcrypto
-# definindo o compilador utilizado
+	# definindo o compilador utilizado
 	CC = gcc
-# definindo arquivo fonte 
-	TESTSOURCES=t.c
-# definindo o nome do executavel
-	TESTBINARY=t 
+	# definindo arquivo fonte
+    	TESTSOURCES=t.c
+	# definindo o nome do executavel
+    	TESTBINARY=t
+	#definindo uma variavel
+	TESTMSG=oi
 
-.FORCE: test
+.FORCE: 
+	test
 
-all: 
+all:
 	make test
 
 clean:
@@ -18,4 +20,5 @@ clean:
 
 test:
 	$(CC) $(TESTSOURCES) -o $(TESTBINARY) $(TESTLINKER) 
-	./$(TESTBINARY) 
+	./$(TESTBINARY) $(TESTMSG)
+
