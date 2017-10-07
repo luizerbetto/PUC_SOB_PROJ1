@@ -3,6 +3,8 @@ struct tcrypt_result {
     int err;
 };
 
+//asm-generic/scatterlist
+//
 /* tie all data structures together */
 struct skcipher_def {
     struct scatterlist sg;
@@ -11,7 +13,7 @@ struct skcipher_def {
     struct tcrypt_result result;
 };
 
-/* Callback function */
+
 static void test_skcipher_cb(struct crypto_async_request *req, int error)
 {
     struct tcrypt_result *result = req->data;
@@ -22,6 +24,9 @@ static void test_skcipher_cb(struct crypto_async_request *req, int error)
     complete(&result->completion);
     pr_info("Encryption finished successfully\n");
 }
+
+/* Callback function */
+
 
 /* Perform cipher operation */
 static unsigned int test_skcipher_encdec(struct skcipher_def *sk,
@@ -86,9 +91,8 @@ static int test_skcipher(void)
         goto out;
     }
 
-    skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-                      test_skcipher_cb,
-                      &sk.result); /*função chamada quando completar o processo
+    skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG, test_skcipher_cb, &sk.result); 
+    /*função chamada quando completar o processo
     *manipulador da estrutura
     *bandeira de sinalização 
     *chamada de função a ser registrada com a estrutura
