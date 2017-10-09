@@ -93,14 +93,27 @@ static void test_skcipher_cb(struct crypto_async_request *req, int error)
 
 /* Perform cipher operation */
 static unsigned int test_skcipher_encdec(struct skcipher_def *sk,
-                     int enc)
+                     char enc)
 {
     int rc = 0;
 
-    if (enc)
-        rc = crypto_skcipher_encrypt(sk->req); // criptografa plaintext
-    else
-        rc = crypto_skcipher_decrypt(sk->req); // descriptografa texto
+    if (enc == 'c')
+	{
+		rc = crypto_skcipher_encrypt(sk->req); // criptografa plaintext
+		
+	}
+    else{
+	if(enc == 'd')
+		{
+			rc = crypto_skcipher_decrypt(sk->req); // descriptografa texto
+			//sprintf(message,"descriptografia");
+		}
+	else
+	{
+		sprintf(message,"invalido");
+	}
+    }
+
 
     switch (rc) {
     case 0:
@@ -131,10 +144,9 @@ static int test_skcipher(void)
     struct skcipher_request *req = NULL; // requisição de chave simetrica de cifra
     char *scratchpad = NULL;
     char *ivdata = NULL; //vetor inicialização -- aleatoriza os caracteres de criptografia, manter aleatorio
-    unsigned char key[32]; // chave
     int ret = -EFAULT;
 
-    skcipher = crypto_alloc_skcipher("cbc-aes-aesni", 0, 0);/* aloca o controlador da chave simetrica de sifra
+    skcipher = crypto_alloc_skcipher("ebc-aes-aesni", 0, 0);/* aloca o controlador da chave simetrica de sifra
     *qual tipo de algoritimo: troca para ecb-aes
     *tipo de cifra
     *mascara da cifra
@@ -153,22 +165,23 @@ static int test_skcipher(void)
         ret = -ENOMEM;
         goto out;
     }
-
+    pr_info(KERN_INFO "my req is read");
     skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG, test_skcipher_cb, &sk.result); 
     /*função chamada quando completar o processo
     *manipulador da estrutura
     *bandeira de sinalização 
     *chamada de função a ser registrada com a estrutura
     *estrutura onde será guardado o resultado da operação de cifra*/
-    
+    pr_info(KERN_INFO "my skcipher is read2");
 
-    /* AES 256 with random key */
-    get_random_bytes(&key, 32);
+    /* AES 256 with key */
     if (crypto_skcipher_setkey(skcipher, key, 32)) {
         pr_info("key could not be set\n");
         ret = -EAGAIN;
         goto out;
     }
+
+    pr_info(KERN_INFO "my skcipher is read");
 
     /* IV will be random */
     ivdata = kmalloc(16, GFP_KERNEL);
@@ -176,18 +189,20 @@ static int test_skcipher(void)
         pr_info("could not allocate ivdata\n");
         goto out;
     }
-    get_random_bytes(ivdata, 16);
+    sprintf(ivdata, "cripto");
+     
 
-    /* Input data will be random */
-    scratchpad = kmalloc(16, GFP_KERNEL);
+
+    scratchpad = kmalloc(size_of_message, GFP_KERNEL);
     if (!scratchpad) {
         pr_info("could not allocate scratchpad\n");
         goto out;
     }
-    get_random_bytes(scratchpad, 16);
+   sprintf(scratchpad, &message[2]);
 
     sk.tfm = skcipher;
     sk.req = req;
+    
 
     /* We encrypt one block */
     sg_init_one(&sk.sg, scratchpad, 16); /*
@@ -198,11 +213,13 @@ static int test_skcipher(void)
     init_completion(&sk.result.completion);
 
     /* encrypt data */
-    ret = test_skcipher_encdec(&sk, 1); //função propria do codigo
+    ret = test_skcipher_encdec(&sk, message[0]); //função propria do codigo
     if (ret)
         goto out;
 
     pr_info("Encryption triggered successfully\n");
+    sprintf(message,scratchpad);
+
 
 out:
     if (skcipher)
@@ -270,25 +287,12 @@ static ssize_t device_write(struct file *filp,const char *buff,size_t len,loff_t
 	size_of_message = strlen(message);                 // store the length of the stored message
 	printk(KERN_INFO "EBBChar: Received %zu characters from the user\n", len);
 	
-	if(message[0] == 'c')
+	if(message[0] == 'h')
 	{ 
-		sprintf(message,"criptografia");
+		sprintf(message,"hash");
 	}else
 	{
-		if(message[0] == 'd')
-		{
-			sprintf(message,"descriptografia");
-		}else
-		{
-			if(message[0] == 'h')
-			{
-				sprintf(message,"hash");
-			}
-			else
-			{
-				sprintf(message,"invalido");
-			}
-		}
+		test_skcipher();
 	}
 	return len;
 }
