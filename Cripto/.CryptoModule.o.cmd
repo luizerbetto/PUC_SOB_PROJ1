@@ -547,51 +547,6 @@ deps_/home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.o := \
   include/linux/kmemleak.h \
     $(wildcard include/config/debug/kmemleak.h) \
   include/linux/uaccess.h \
-  include/linux/if_alg.h \
-  include/linux/random.h \
-    $(wildcard include/config/arch/random.h) \
-  include/linux/irqnr.h \
-    $(wildcard include/config/generic/hardirqs.h) \
-  /usr/src/linux-3.2.36/arch/x86/include/asm/archrandom.h \
-  include/linux/scatterlist.h \
-  /usr/src/linux-3.2.36/arch/x86/include/asm/scatterlist.h \
-  include/linux/mm.h \
-    $(wildcard include/config/sysctl.h) \
-    $(wildcard include/config/stack/growsup.h) \
-    $(wildcard include/config/ksm.h) \
-    $(wildcard include/config/debug/pagealloc.h) \
-    $(wildcard include/config/hugetlbfs.h) \
-  include/linux/rbtree.h \
-  include/linux/debug_locks.h \
-    $(wildcard include/config/debug/locking/api/selftests.h) \
-  include/linux/mm_types.h \
-    $(wildcard include/config/split/ptlock/cpus.h) \
-    $(wildcard include/config/want/page/debug/flags.h) \
-    $(wildcard include/config/cmpxchg/local.h) \
-    $(wildcard include/config/aio.h) \
-    $(wildcard include/config/mm/owner.h) \
-    $(wildcard include/config/mmu/notifier.h) \
-  include/linux/auxvec.h \
-  include/linux/page-debug-flags.h \
-    $(wildcard include/config/page/poisoning.h) \
-    $(wildcard include/config/page/debug/something/else.h) \
-  include/linux/range.h \
-  /usr/src/linux-3.2.36/arch/x86/include/asm/pgtable.h \
-  /usr/src/linux-3.2.36/arch/x86/include/asm/pgtable_32.h \
-    $(wildcard include/config/highpte.h) \
-  /usr/src/linux-3.2.36/arch/x86/include/asm/pgtable_32_types.h \
-  /usr/src/linux-3.2.36/arch/x86/include/asm/pgtable-3level.h \
-  include/asm-generic/pgtable.h \
-  include/linux/page-flags.h \
-    $(wildcard include/config/pageflags/extended.h) \
-    $(wildcard include/config/arch/uses/pg/uncached.h) \
-    $(wildcard include/config/memory/failure.h) \
-    $(wildcard include/config/swap.h) \
-    $(wildcard include/config/s390.h) \
-  include/linux/huge_mm.h \
-  include/linux/vmstat.h \
-    $(wildcard include/config/vm/event/counters.h) \
-  include/linux/vm_event_item.h \
 
 /home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.o: $(deps_/home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.o)
 

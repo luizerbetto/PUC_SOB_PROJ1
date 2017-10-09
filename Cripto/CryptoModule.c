@@ -17,10 +17,7 @@
 #include <crypto/hash.h>
 #include <linux/err.h>
 #include <linux/crypto.h>
-#include <linux/if_alg.h>
-#include <linux/random.h>
-#include <linux/scatterlist.h>
-
+#include <asm-generic/errno.h>
 
 #define DEVICE_NAME "crypto"   /* Dev name as it appears in /proc/devices   */
 #define CLASS_NAME "crypto"
@@ -68,47 +65,19 @@ MODULE_PARM_DESC(key, "key = ");
 
 //---------------------Área de API do codigo----------------------------------------//
 
-int crypto_register_alg(struct crypto_alg *alg);
-
-int crypto_unregister_alg(struct crypto_alg *alg);
-
 struct tcrypt_result {
     struct completion completion;
     int err;
 };
 
-/* tie all data structures together */
 struct skcipher_def {
     struct scatterlist sg;
-    struct crypto_skcipher *tfm; //controlador de cifra, nescessario para invocação API da chave simetrica
-    struct skcipher_request *req; // requisição de chave simetrica de cifra
+    struct aead_tfm *tfm;
+    struct aead_request *req;
     struct tcrypt_result result;
 };
 
-struct sockaddr_alg sa = {
-    .salg_family = AF_ALG,
-    .salg_type = "skcipher", /* this selects the symmetric cipher */
-    .salg_name = "cbc(aes)" /* this is the cipher name */
-};
-
-int crypto_skcipher_encrypt(struct skcipher_request * req);
-
-int crypto_skcipher_decrypt(struct skcipher_request * req);
-
-struct crypto_skcipher * crypto_alloc_skcipher(const char * alg_name, u32 type, u32 mask);
-
-struct skcipher_request * skcipher_request_alloc(struct crypto_skcipher * tfm, gfp_t gfp);
-
-int crypto_skcipher_setkey(struct crypto_skcipher * tfm, const u8 * key, unsigned int keylen);
-
-void skcipher_request_set_crypt(struct skcipher_request * req, struct scatterlist * src, struct scatterlist * dst, unsigned int cryptlen, void * iv);
-
-void crypto_free_skcipher(struct crypto_skcipher * tfm);
-
-void skcipher_request_free(struct skcipher_request * req);
-
-void skcipher_request_set_callback(struct skcipher_request * req, u32 flags, crypto_completion_t compl, void * data);
-
+/* Callback function */
 static void test_skcipher_cb(struct crypto_async_request *req, int error)
 {
     struct tcrypt_result *result = req->data;
@@ -118,7 +87,7 @@ static void test_skcipher_cb(struct crypto_async_request *req, int error)
     result->err = error;
     complete(&result->completion);
     pr_info("Encryption finished successfully\n");
-}
+};
 
 
 /* Perform cipher operation */
@@ -140,7 +109,7 @@ static unsigned int test_skcipher_encdec(struct skcipher_def *sk,
         rc = wait_for_completion_interruptible( /*espera o final de uma tarefa assinalada*/
             &sk->result.completion);
         if (!rc && !sk->result.err) {
-            //reinit_completion(&sk->result.completion);
+            reinit_completion(&sk->result.completion);
             break;
         }
     default:
@@ -151,15 +120,14 @@ static unsigned int test_skcipher_encdec(struct skcipher_def *sk,
     init_completion(&sk->result.completion);
 
     return rc;
-};
-
+}
 
 /* Inicialização e ativação operação de cifra*/
 static int test_skcipher(void)
 {
     struct skcipher_def sk; // estrutura principal contendo todos dados nescessarios
-    struct crypto_skcipher *skcipher = NULL; //controlador de cifra, nescessario para invocação API da chave simetrica
-    struct skcipher_request *req = NULL; // requisição de chave simetrica de cifra
+    struct aead_tfm *skcipher = NULL; //controlador de cifra, nescessario para invocação API da chave simetrica
+    struct aead_request *req = NULL; // requisição de chave simetrica de cifra
     char *scratchpad = NULL;
     char *ivdata = NULL; //vetor inicialização -- aleatoriza os caracteres de criptografia, manter aleatorio
     unsigned char key[32]; // chave
@@ -185,13 +153,12 @@ static int test_skcipher(void)
         goto out;
     }
 
-    skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-                      test_skcipher_cb,
-                      &sk.result); /*função chamada quando completar o processo
+    skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG, test_skcipher_cb, &sk.result); 
+    /*função chamada quando completar o processo
     *manipulador da estrutura
     *bandeira de sinalização 
     *chamada de função a ser registrada com a estrutura
-    *estrutura onde será guardado o resultado da operação de cifra*/
+    *estrutura onde será guardado o resultado da operação de cifra
     
 
     /* AES 256 with random key */
@@ -247,6 +214,8 @@ out:
         kfree(scratchpad); // libera a data de entrada
     return ret;
 };
+
+
 
 //----------------------------------------------------------------------------------//
 
@@ -305,7 +274,6 @@ static ssize_t device_write(struct file *filp,const char *buff,size_t len,loff_t
 	if(message[0] == 'c')
 	{ 
 		sprintf(message,"criptografia");
-		test_skcipher();
 	}else
 	{
 		if(message[0] == 'd')

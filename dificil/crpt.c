@@ -25,8 +25,18 @@ static void test_skcipher_cb(struct crypto_async_request *req, int error)
     pr_info("Encryption finished successfully\n");
 }
 
-/* Callback function */
 
+/* Callback function */
+static void test_skcipher_cb(struct crypto_async_request *req, int error)
+{
+    struct tcrypt_result *result = req->data;
+
+    if (error == -EINPROGRESS)
+        return;
+    result->err = error;
+    complete(&result->completion);
+    pr_info("Encryption finished successfully\n");
+};
 
 /* Perform cipher operation */
 static unsigned int test_skcipher_encdec(struct skcipher_def *sk,

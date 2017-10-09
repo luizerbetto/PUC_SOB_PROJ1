@@ -26,18 +26,9 @@ __attribute__((section("__versions"))) = {
 	{ 0x6bc3fbc0, "__unregister_chrdev" },
 	{ 0x6c0f51ce, "__class_create" },
 	{ 0x346bd748, "__register_chrdev" },
-	{ 0xf0fdf6cb, "__stack_chk_fail" },
-	{ 0x37a0cba, "kfree" },
-	{ 0x53f2ef10, "wait_for_completion_interruptible" },
-	{ 0x48eb0c0d, "__init_waitqueue_head" },
-	{ 0xb6244511, "sg_init_one" },
-	{ 0xba98ff5c, "kmem_cache_alloc" },
-	{ 0xcc811a88, "kmalloc_caches" },
-	{ 0x79aa04a2, "get_random_bytes" },
-	{ 0xd0d8621b, "strlen" },
 	{ 0x2f287f0d, "copy_to_user" },
 	{ 0x50eedeb8, "printk" },
-	{ 0x19a9e62b, "complete" },
+	{ 0xd0d8621b, "strlen" },
 	{ 0x91715312, "sprintf" },
 	{ 0x966e767a, "module_put" },
 };
@@ -48,4 +39,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "B4BBD1B8D85375DC5CA7E20");
+MODULE_INFO(srcversion, "6DE5526E1B904F69F4C3207");
