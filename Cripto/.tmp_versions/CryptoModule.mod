@@ -1,2 +1,3 @@
-/home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.ko
-/home/shin/Documentos/PUC_SOB_PROJ1/Cripto/CryptoModule.o
+/home/shin/Documents/PUC_SOB_PROJ1/Cripto/CryptoModule.ko
+/home/shin/Documents/PUC_SOB_PROJ1/Cripto/CryptoModule.o
+

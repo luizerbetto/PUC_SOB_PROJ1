@@ -13,11 +13,9 @@
 #include <asm/uaccess.h> 
 #include <linux/device.h>
 #include <linux/completion.h>
-#include <asm-generic/scatterlist.h>
-#include <crypto/hash.h>
-#include <linux/err.h>
-#include <linux/crypto.h>
-#include <asm-generic/errno.h>
+#include <linux/scatterlist.h>
+#include <crypto/skcipher.h>
+#include <linux/random.h>
 
 #define DEVICE_NAME "crypto"   /* Dev name as it appears in /proc/devices   */
 #define CLASS_NAME "crypto"
@@ -70,12 +68,15 @@ struct tcrypt_result {
     int err;
 };
 
+/* tie all data structures together */
 struct skcipher_def {
     struct scatterlist sg;
-    struct aead_tfm *tfm;
-    struct aead_request *req;
+    struct crypto_skcipher *tfm; //controlador de cifra, nescessario para invocação API da chave simetrica
+    struct skcipher_request *req; // requisição de chave simetrica de cifra
     struct tcrypt_result result;
 };
+
+
 
 /* Callback function */
 static void test_skcipher_cb(struct crypto_async_request *req, int error)
@@ -126,8 +127,8 @@ static unsigned int test_skcipher_encdec(struct skcipher_def *sk,
 static int test_skcipher(void)
 {
     struct skcipher_def sk; // estrutura principal contendo todos dados nescessarios
-    struct aead_tfm *skcipher = NULL; //controlador de cifra, nescessario para invocação API da chave simetrica
-    struct aead_request *req = NULL; // requisição de chave simetrica de cifra
+    struct crypto_skcipher *skcipher = NULL; //controlador de cifra, nescessario para invocação API da chave simetrica
+    struct skcipher_request *req = NULL; // requisição de chave simetrica de cifra
     char *scratchpad = NULL;
     char *ivdata = NULL; //vetor inicialização -- aleatoriza os caracteres de criptografia, manter aleatorio
     unsigned char key[32]; // chave
@@ -158,7 +159,7 @@ static int test_skcipher(void)
     *manipulador da estrutura
     *bandeira de sinalização 
     *chamada de função a ser registrada com a estrutura
-    *estrutura onde será guardado o resultado da operação de cifra
+    *estrutura onde será guardado o resultado da operação de cifra*/
     
 
     /* AES 256 with random key */
@@ -214,8 +215,6 @@ out:
         kfree(scratchpad); // libera a data de entrada
     return ret;
 };
-
-
 
 //----------------------------------------------------------------------------------//
 
