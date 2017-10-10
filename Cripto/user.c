@@ -1,3 +1,13 @@
+/*
+#Luiz Felipe Zerbetto Masson RA: 15166804
+#José Carlos Clausen Neto RA: 15055825
+#Danilo Luis Lopes Raymundo Paixão RA: 15051659
+#Yessica Melaine Castillo RA: 13054895
+#Janaina Mendes Mano Sanches RA: 07270085
+#Raissa Furlan Davinho RA: 15032006
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -50,10 +60,10 @@ int main(){
 	menu();
 	scanf("%c", choice);
 	
-	printf("Digite os dados que serão utilizados: ");
+	printf("\nDigite os dados que serão utilizados: ");
 	scanf("%s", data);
 	
-	printf("Escolha de função: %s\nDados recebidos: %s\n", choice, data);
+	printf("\nEscolha de função: %s\nDados recebidos: %s\n", choice, data);
 	
 	//dataToParam(choice, &data, param);
 	strcat(param, choice);
@@ -66,9 +76,9 @@ int main(){
 		printf("Nao foi possivel escrever no device de criptografia.\n");
 		return errno;
 	}
-	printf("Escrita realizada com sucesso :)\n");
+	printf("\nCodificacao em andamento :)\n");
 	getchar();
-	printf("Pressione uma tecla");
+	printf("Pressione ENTER");
 	getchar();
 	// Leitura do device
 	rd = read(fp, answer, TAM_BUFFER);
@@ -76,11 +86,10 @@ int main(){
 		printf("Não foi possível ler o device de criptografia.\n");
 		return errno;
 	}
-	printf("Dados recebidos: %s\n", answer);
+	printf("\nDados recebidos: %s\n", answer);
 	
-	printf("Deseja fazer mais alguma operação (s/n)?  ");
-	getchar();
-	scanf("%c", &op);
+	printf("Decriptacao esta comecando!\n");
+
 	
 	strcpy(param, "");	
 
@@ -95,9 +104,8 @@ int main(){
 		printf("Nao foi possivel escrever no device de criptografia.\n");
 		return errno;
 	}
-	printf("Escrita realizada com sucesso :)\n");
-	getchar();
-	printf("Pressione uma tecla");
+	printf("\nDecodificacao em andamento :)\n");
+	printf("Pressione ENTER");
 	getchar();
 	// Leitura do device
 	rd = read(fp, answer, TAM_BUFFER);
@@ -105,7 +113,11 @@ int main(){
 		printf("Não foi possível ler o device de criptografia.\n");
 		return errno;
 	}
-	printf("Dados recebidos: %s\n", answer);
+	printf("\nDados recebidos: %s\n", answer);
+	
+	printf("Deseja fazer mais alguma operação (s/n)?  ");
+	getchar();
+	scanf("%c", &op);
 
 	}while(op == 's');	
 }
