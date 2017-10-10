@@ -33,7 +33,7 @@ static int device_release(struct inode *, struct file *);
 static ssize_t device_read(struct file *, char *, size_t, loff_t *);
 static ssize_t device_write(struct file *, const char *, size_t, loff_t *);
 
-static char *key = "blah";
+static char *key = "12345678910111213";
 static int Major;		/* Major number assigned to our device driver */
 static int Device_Open = 0;	/* Is device open? Used to prevent multiple access to device */
 
@@ -145,8 +145,9 @@ static int test_skcipher(void)
     char *scratchpad = NULL;
     char *ivdata = NULL; //vetor inicialização -- aleatoriza os caracteres de criptografia, manter aleatorio
     int ret = -EFAULT;
+    char *buf;
 
-    skcipher = crypto_alloc_skcipher("ebc-aes-aesni", 0, 0);/* aloca o controlador da chave simetrica de sifra
+    skcipher = crypto_alloc_skcipher("cbc-aes-aesni", 0, 0);/* aloca o controlador da chave simetrica de sifra
     *qual tipo de algoritimo: troca para ecb-aes
     *tipo de cifra
     *mascara da cifra
@@ -174,6 +175,8 @@ static int test_skcipher(void)
     *estrutura onde será guardado o resultado da operação de cifra*/
     pr_info(KERN_INFO "my skcipher is read2");
 
+   
+
     /* AES 256 with key */
     if (crypto_skcipher_setkey(skcipher, key, 32)) {
         pr_info("key could not be set\n");
@@ -189,7 +192,7 @@ static int test_skcipher(void)
         pr_info("could not allocate ivdata\n");
         goto out;
     }
-    sprintf(ivdata, "cripto");
+    sprintf(ivdata, "1234567891234567");
      
 
 
@@ -218,7 +221,8 @@ static int test_skcipher(void)
         goto out;
 
     pr_info("Encryption triggered successfully\n");
-    sprintf(message,scratchpad);
+    buf = sg_virt(&sk.sg);
+    sprintf(message, buf);
 
 
 out:
