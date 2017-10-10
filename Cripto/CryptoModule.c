@@ -152,6 +152,7 @@ static int test_skcipher(void)
     *tipo de cifra
     *mascara da cifra
     */
+
     if (IS_ERR(skcipher)) {
         pr_info("could not allocate skcipher handle\n");
         return PTR_ERR(skcipher);

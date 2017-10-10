@@ -84,6 +84,7 @@ int main(){
 	
 	strcpy(param, "");	
 
+
 	strcat(param, "d");
 	strcat(param, " ");
 	strcat(param, answer);
